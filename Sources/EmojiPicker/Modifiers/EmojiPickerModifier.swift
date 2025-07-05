@@ -20,11 +20,16 @@ struct EmojiPickerModifier: ViewModifier {
     // MARK: - Body
     
     public func body(content: Content) -> some View {
-        content.overlay {
-            EmojiPickerView(
-                isDisplayed: $isDisplayed,
-                onEmojiSelected: onEmojiSelected
-            )
+        ZStack {
+            content
+            if isDisplayed {
+                EmojiPickerView(
+                    isDisplayed: $isDisplayed,
+                    onEmojiSelected: onEmojiSelected
+                )
+//                .transition(.move(edge: .bottom))
+                .zIndex(1)
+            }
         }
     }
 }

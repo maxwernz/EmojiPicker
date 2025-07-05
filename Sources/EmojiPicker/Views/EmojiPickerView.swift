@@ -31,8 +31,15 @@ struct EmojiPickerView: View {
             backgroundOverlay
             contentView
         }
+        .onAppear {
+            dragOffset = Size.contentHeight
+            withAnimation(.easeInOut(duration: Size.animationDuration)) {
+                dragOffset = 0
+            }
+        }
+        .transition(.move(edge: .bottom))
         .animation(
-            .easeIn(duration: Size.animationDuration),
+            .easeInOut(duration: Size.animationDuration),
             value: isDisplayed.wrappedValue
         )
         .ignoresSafeArea()
@@ -43,7 +50,7 @@ extension EmojiPickerView {
     
     private var backgroundOverlay: some View {
         Color.black.ignoresSafeArea()
-            .opacity(isDisplayed.wrappedValue ? Size.backgroundOpacity : 0.0)
+            .opacity(0.001)
             .onTapGesture {
                 isDisplayed.wrappedValue.toggle()
             }
@@ -131,7 +138,7 @@ extension EmojiPickerView {
         .frame(height: Size.contentHeight)
         .background(.EmojiPicker.background)
         .clipShape(RoundedRectangle(cornerRadius: Size.contentCornerRadius))
-        .offset(y: isDisplayed.wrappedValue ? dragOffset : Size.contentHeight)
+        .offset(y: dragOffset)
         .gesture(
             DragGesture()
                 .onChanged { value in
@@ -146,3 +153,4 @@ extension EmojiPickerView {
         )
     }
 }
+
